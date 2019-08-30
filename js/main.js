@@ -35,41 +35,32 @@ class Stopwatch
             this._btnPlay.removeAttribute('disabled','')
         })
     }
+    logic()
+    {
+        if(this._seconds == 59){
+            this._seconds = -1
+            this._minutes++
+            this._minutes < 10 ? this.minutesEl = `0${this._minutes}`: this.minutesEl = this._minutes
+            if (this._minutes == 60) {
+                this._minutes = -1
+                this._hours++
+                this._hours < 10 ? this.hoursEl = `0${this._hours}`: this.hoursEl = this._hours
+            }
+            if(this._hours == 23){
+                this._hours = -1
+                this._days++
+            }
+        }
+        this._seconds++
+        this._seconds < 10 ? this.secondsEl = `0${this._seconds}`: this.secondsEl = this._seconds
+    }
     play()
     {
         if(this._isRunning == false){
-            console.log('play',this._isRunning)
             this._isRunning = true
             this._btnPlay.setAttribute('disabled','')
             this._interval = setInterval(() => {
-                if(this._seconds == 60){
-                    this._seconds = 0
-                    this._minutes++
-                    if (this._minutes < 10) {
-                        this._minutesEl.innerText = `0${this._minutes}`
-                    }else{
-                        this._minutesEl.innerText = this._minutes
-                    }
-                    if (this._minutes == 60) {
-                        this._minutes = 0
-                        this._hours++
-                        if(this._hours < 10){
-                            this._hoursEl.innerText = `0${this._hours}`
-                        }else{
-                            this._hoursEl.innerText = this._hours
-                        }
-                    }
-                    if(this._hours > 23){
-                        this._hours = 0
-                        this._days++
-                    }
-                }
-                this._seconds++
-                if (this._seconds < 10) {
-                    this._secondsEl.innerText = `0${this._seconds}`
-                }else{
-                    this._secondsEl.innerText = this._seconds
-                }
+                this.logic();
             }, 1000);
         }
     }
@@ -77,7 +68,6 @@ class Stopwatch
     {
         if(this._isRunning){
             this._isRunning = false;
-            console.log('pause',this._isRunning)
             clearInterval(this._interval)
             this._btnPlay.removeAttribute('disabled','')
         }
@@ -86,13 +76,24 @@ class Stopwatch
     {
         if(this._seconds > 0){
             this._isRunning = false
-            console.log('restart',this._isRunning)
             this.resetTime()
             clearInterval(this._interval)
-            this._minutesEl.innerText = `0${this._minutes}`
-            this._hoursEl.innerText = `0${this._hours}`
-            this._secondsEl.innerText = `0${this._seconds}`
+            this.minutesEl = `0${this._minutes}`
+            this.hoursEl = `0${this._hours}`
+            this.secondsEl = `0${this._seconds}`
         }
+    }
+    set hoursEl(value)
+    {
+        this._hoursEl.innerText = value
+    }
+    set minutesEl(value)
+    {
+        this._minutesEl.innerText = value
+    }
+    set secondsEl(value)
+    {
+        this._secondsEl.innerText = value
     }
 }
 const stopwatch = new Stopwatch()
