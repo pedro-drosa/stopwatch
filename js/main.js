@@ -15,6 +15,7 @@ class Stopwatch
     }
     resetTime()
     {
+        this._days = 0
         this._hours = 0
         this._minutes = 0 
         this._seconds = 0
@@ -37,8 +38,8 @@ class Stopwatch
     play()
     {
         if(this._isRunning == false){
-            this._isRunning = true
             console.log('play',this._isRunning)
+            this._isRunning = true
             this._btnPlay.setAttribute('disabled','')
             this._interval = setInterval(() => {
                 if(this._seconds == 60){
@@ -58,6 +59,10 @@ class Stopwatch
                             this._hoursEl.innerText = this._hours
                         }
                     }
+                    if(this._hours > 23){
+                        this._hours = 0
+                        this._days++
+                    }
                 }
                 this._seconds++
                 if (this._seconds < 10) {
@@ -65,7 +70,7 @@ class Stopwatch
                 }else{
                     this._secondsEl.innerText = this._seconds
                 }
-            }, 0);
+            }, 1000);
         }
     }
     pause()
