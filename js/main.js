@@ -7,11 +7,9 @@ class Stopwatch
         this._hoursEl = document.querySelector('[data-display="hours"]')
         this._minutesEl = document.querySelector('[data-display="minutes"]')
         this._secondsEl = document.querySelector('[data-display="seconds"]')
-        this._btnPlay = document.querySelector('[data-control="play"]');
-        this._btnPause = document.querySelector('[data-control="pause"]');
-        this._btnRestart = document.querySelector('[data-control="restart"]');
+        this._btnPlay = document.querySelector('[data-control="play"]')
         this.resetTime()
-        this.initEvents();
+        this.initButtons()
     }
     resetTime()
     {
@@ -19,21 +17,36 @@ class Stopwatch
         this._hours = 0
         this._minutes = 0 
         this._seconds = 0
+        this.minutesEl = `0${this._minutes}`
+        this.hoursEl = `0${this._hours}`
+        this.secondsEl = `0${this._seconds}`
     }
-    initEvents()
+    initButtons()
     {
-        this._btnPlay.addEventListener('click',()=>{
-            this.play()
+        const buttons = document.querySelectorAll('[data-control]')
+        buttons.forEach((button)=>{
+            button.addEventListener('click',(event)=>{
+                const action = event.currentTarget.dataset.control
+                this.initEvents(action)
+            })
         })
-
-        this._btnPause.addEventListener('click',()=>{
-            this.pause()
-        })
-
-        this._btnRestart.addEventListener('click',()=>{
-            this.restart()
-            this._btnPlay.removeAttribute('disabled','')
-        })
+    }
+    initEvents(value)
+    {
+        switch (value) {
+            case value = 'play':
+                this.play()
+                break;
+            case value = 'pause':
+                this.pause()
+                break;
+            case value = 'restart':
+                this.restart()
+                break;
+            default:
+                console.log(value,'BUGEI...')
+                break;
+        }
     }
     logic()
     {
@@ -56,7 +69,7 @@ class Stopwatch
     }
     play()
     {
-        if(this._isRunning == false){
+        if(!this._isRunning){
             this._isRunning = true
             this._btnPlay.setAttribute('disabled','')
             this._interval = setInterval(() => {
@@ -64,23 +77,23 @@ class Stopwatch
             }, 1000);
         }
     }
+    resetPlayState()
+    {
+        this._isRunning = false
+        this._btnPlay.removeAttribute('disabled','')
+        clearInterval(this._interval)
+    }
     pause()
     {
         if(this._isRunning){
-            this._isRunning = false;
-            clearInterval(this._interval)
-            this._btnPlay.removeAttribute('disabled','')
+            this.resetPlayState()
         }
     }
     restart()
     {
         if(this._seconds > 0){
-            this._isRunning = false
+            this.resetPlayState()
             this.resetTime()
-            clearInterval(this._interval)
-            this.minutesEl = `0${this._minutes}`
-            this.hoursEl = `0${this._hours}`
-            this.secondsEl = `0${this._seconds}`
         }
     }
     set hoursEl(value)
