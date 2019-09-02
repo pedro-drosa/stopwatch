@@ -31,6 +31,9 @@ p:nth-child(2)::after{
 p:nth-child(2)::before{
     content: ':';
 }
+[data-display="miliseconds"]{
+    font-size: 1.875em;
+}
 i{
     font-size: 3rem;
     cursor: pointer;
